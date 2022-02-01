@@ -1,8 +1,9 @@
 <template>
 <div v-if="error">{{ error }}</div>
-<div>
-  <PostList v-if="showPosts" :posts="posts" />
+<div v-if="posts.length">
+  <PostList  :posts="posts" />
 </div>
+<div v-else>Loading...</div>
 <button @click="showPosts = !showPosts">Toggle Posts</button>
 <button @click="posts.pop()">Delete a Post</button>
   
@@ -59,13 +60,15 @@ export default {
 
     const posts = ref([])
 
+    const showPosts = ref(true)
+
     const error = ref(null)
 
-    const showPosts = ref(true)
+
 
     const load = async() => {
       try {
-        let data = await fetch('http://localhost:3000/post')
+        let data = await fetch('http://localhost:3000/posts')
         if (!data.ok){
           throw Error('No data available')
         }
